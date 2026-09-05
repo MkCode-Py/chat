@@ -1,0 +1,37 @@
+{
+  "summary": "Full backend + frontend regression for Ponte chat MVP. 24/24 pytest cases passed against the public URL — auth (register/login/me + 409/401), user search by prefix (excludes self, @ prefix), conversations (create/idempotent/list/404/400-self), messages (translation pt<->es via OpenAI gpt-5.6-terra returning natural Rioplatense Spanish, ordered GET + mark-read, reply, react toggle, edit re-translates, delete soft-delete with 403 for non-owner), and media/voice endpoint auth guard. Frontend UI verified end-to-end on 390x844 viewport: Welcome → Login (bruno@test.com) → Chats list → FAB → Search '@luc' → open Lucia conversation → send text 'Testando integracao UI' → bubble renders with translated 'Probando integración de UI' as PRIMARY (larger) and original as smaller discrete text below (differentiator confirmed) → long-press opens actions sheet with reactions row (👍❤️😂😮😢🙏) + Responder/Editar/Apagar/Cancelar. Deleted-message and edited-badge rendering verified. No deprecated Expo packages (uses expo-audio). Two harmless RNW console warnings observed (pointerEvents & shadow* deprecations) — coming from RN core, not app code.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_ponte_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py test_reply_and_reactions toggle logic verified working; toggling same emoji removes it, different emoji replaces user's reaction (one reaction per user).",
+    "server.py:359 datetime.fromisoformat(last_read) parses ISO string persisted with iso() — works but comparing stored-as-string keys to datetime objects; consider storing last_read as datetime for consistency (minor, non-blocking).",
+    "GET /api/conversations/{id}/messages marks read side-effect on every GET — acceptable given polling every 2500ms; no bug.",
+    "Frontend AuthProvider signIn/signUp does router.replace inside the screen after awaiting, which combined with useProtectedRoute redirect could race; observed working correctly in tests.",
+    "RN Web console warnings (pointerEvents / shadow* deprecations) originate from RN internals and Ionicons — no action needed."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_ponte_api.py"
+  ],
+  "success_rate": {
+    "backend": "100% (24/24)",
+    "frontend": "100% of tested critical flows"
+  },
+  "seed_data_creation": "Used pre-seeded users bruno@test.com and lucia@test.com. Test suite also creates one throwaway user per run (test_<uuid>@t.com) plus conversation messages between bruno and lucia. TEST_ prefix not used because API validates username regex — throwaway usernames use 'test_<uuid>' pattern instead.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Public base URL is EXPO_PUBLIC_BACKEND_URL=https://pt-es-chat.preview.emergentagent.com. Pytest suite at /app/backend/tests/test_ponte_api.py is idempotent (auto-registers bruno/lucia if missing) and finishes in ~10s. Voice endpoint /api/conversations/{id}/voice is only smoke-tested (auth-required) to avoid burning OpenAI credits — main agent can validate STT/TTS manually if needed. Long-press on web is simulated via mouse.down + wait 700ms + mouse.up (RN Pressable delayLongPress=250ms).",
+  "rca_of_issue": "No bugs to RCA — this was an MVP verification run and all specified acceptance criteria pass."
+}

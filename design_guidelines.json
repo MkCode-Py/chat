@@ -1,0 +1,159 @@
+{
+  "app_name": "Ponte",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "A highly professional, fast, and native-feeling chat experience where contextual translation feels invisible, magical, and perfectly legible.",
+  "color": {
+    "surface": "#FFFFFF",
+    "onSurface": "#1C1C1E",
+    "surfaceSecondary": "#F2F2F7",
+    "onSurfaceSecondary": "#3A3A3C",
+    "surfaceTertiary": "#E5E5EA",
+    "onSurfaceTertiary": "#8E8E93",
+    "surfaceInverse": "#1C1C1E",
+    "onSurfaceInverse": "#FFFFFF",
+    "brand": "#0038A8",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#0038A8",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#F5A623",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#E6F0FF",
+    "onBrandTertiary": "#0038A8",
+    "success": "#34C759",
+    "onSuccess": "#FFFFFF",
+    "warning": "#FF9500",
+    "onWarning": "#FFFFFF",
+    "error": "#FF3B30",
+    "onError": "#FFFFFF",
+    "info": "#007AFF",
+    "onInfo": "#FFFFFF",
+    "border": "#E5E5EA",
+    "borderStrong": "#C7C7CC",
+    "divider": "#E5E5EA",
+    "muted": "#8E8E93"
+  },
+  "typography": {
+    "displayFontFamily": "Geist",
+    "textFontFamily": "Geist",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Use crisp, native-feeling margins. 16pt (lg) horizontal screen padding. 4pt (xs) tight spacing between translated and original text within bubbles.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "stack_only",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": "true",
+    "do's": [
+      "Use glass effect for the bottom message composer bar and the top navigation header to create depth over the scrollable chat history.",
+      "Use subtle glass effect for sticky date headers in the chat timeline."
+    ],
+    "dont's": [
+      "Never use glass effect on the message bubbles themselves (they must remain solid for text legibility)."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Welcome / Auth",
+      "purpose": "Onboarding, register (@username), and login with a clean, trustworthy feel.",
+      "states": {
+        "loading": "Centered spinner with 'Authenticating...'",
+        "empty": "N/A",
+        "error": "Standard alert or inline red helper text below inputs."
+      },
+      "layout": "Centered logo. Large welcoming display text. Single-column input fields with labels above. Full-width sticky primary CTA button at the bottom (KeyboardAvoidingView). Use brandPrimary for the main CTA."
+    },
+    {
+      "name": "Chat List (Inbox)",
+      "purpose": "Displays recent conversations, last message preview, and unread counts.",
+      "states": {
+        "loading": "Skeleton rows (avatar circle + two text bars).",
+        "empty": "Illustration centered + 'No messages yet. Search for a user to start.' + CTA button.",
+        "error": "Error message with 'Tap to retry' button."
+      },
+      "layout": "Standard iOS list layout. Row: 48pt Avatar on left. Right side: Top row has Name (bold) and Timestamp (muted, sm). Bottom row has message snippet (truncated) and Unread Badge (brandPrimary circle with white text). Divider between rows starts after the avatar. FAB or Header button for 'New Chat'."
+    },
+    {
+      "name": "New Chat / Search",
+      "purpose": "Search and add users by unique @username.",
+      "states": {
+        "loading": "ActivityIndicator below search bar.",
+        "empty": "Subtle illustration + 'Type a username to find someone.'",
+        "error": "User not found message."
+      },
+      "layout": "Sticky glass header with a large Search Input. Below, a list of search results. Tapping a result pushes to the Conversation screen."
+    },
+    {
+      "name": "Conversation Screen (Hero)",
+      "purpose": "The core messaging experience with dual-text contextual translation.",
+      "states": {
+        "loading": "ActivityIndicator at top for fetching history.",
+        "empty": "Subtle date pill 'Today'. Empty chat background.",
+        "error": "Toast or inline bubble 'Failed to send. Tap to retry.'"
+      },
+      "layout": "Header: Glass background, back button, recipient avatar and name. Content: Scrollable list of message bubbles over a subtle patterned background. Composer: Glass-backed input bar at bottom with text input, and a mic button. Message Bubbles: SENDER (Right-aligned, solid brandPrimary #0038A8, asymmetrical radius with sharp bottom-right). RECEIVER (Left-aligned, solid surfaceSecondary #F2F2F7, sharp bottom-left). DUAL-TEXT BUBBLE RULE: The Translated Text is on top (base size, weight 500). Below it, a 4pt gap, then the Original Text (sm size, weight 400). Sender Original Text color = rgba(255,255,255,0.7). Receiver Original Text color = muted #8E8E93. Voice Notes: Play button + waveform + dual-text transcription below. Reactions: Floating pill overlapping the bottom edge of the bubble."
+    }
+  ],
+  "images": {
+    "empty_chat_list": {
+      "url": "https://images.unsplash.com/photo-1662974770404-468fd9660389?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNTl8MHwxfHNlYXJjaHwxfHxjbGVhbiUyMG1lc3NhZ2luZyUyMGFwcCUyMGVtcHR5JTIwc3RhdGUlMjBpbGx1c3RyYXRpb258ZW58MHx8fHwxNzg4NjA5Mjc3fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Empty chat list illustration showing 3D speech bubbles"
+    },
+    "chat_background_texture": {
+      "url": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwyfHxzdWJ0bGUlMjBtaW5pbWFsJTIwYWJzdHJhY3QlMjBwYXR0ZXJuJTIwYmFja2dyb3VuZCUyMHRleHR1cmUlMjBsaWdodHxlbnwwfHx8fDE3ODg2MDkyNzd8MA&ixlib=rb-4.1.0&q=85",
+      "dark": "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHxzdWJ0bGUlMjBtaW5pbWFsJTIwYWJzdHJhY3QlMjBwYXR0ZXJuJTIwYmFja2dyb3VuZCUyMHRleHR1cmUlMjBsaWdodHxlbnwwfHx8fDE3ODg2MDkyNzd8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Subtle minimal wave pattern texture for chat background"
+    }
+  },
+  "haptics": {
+    "send_message": "impactLight",
+    "record_voice_start": "impactMedium",
+    "record_voice_stop": "impactMedium",
+    "reaction_add": "selection",
+    "bubble_long_press": "impactHeavy"
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: The core differentiator is the DUAL-TEXT message bubble. Implement it perfectly. The translated text MUST be the primary visual element (larger, standard contrast). The original text MUST be placed directly beneath it, visibly smaller (`sm`) and muted.",
+    "For the Sender bubble (brandPrimary #0038A8 background), use white text for the translated part, and rgba(255,255,255,0.7) for the original part.",
+    "For the Receiver bubble (surfaceSecondary #F2F2F7 background), use onSurface (#1C1C1E) for the translated part, and muted (#8E8E93) for the original part.",
+    "Use asymmetrical border radii for message bubbles. e.g., Sent messages have a sharp bottom-right corner (borderBottomRightRadius: 4), while Received messages have a sharp bottom-left corner.",
+    "Color Constraints: The user strictly requested the blue found in the Brazil/Paraguay flags (#0038A8) as the core brand color. Do NOT substitute this with another blue.",
+    "Dark Mode: Implement standard iOS-style dark mode inversion (surface: #000000, surfaceSecondary: #1C1C1E). Adjust the brandPrimary bubble slightly lighter if needed for contrast, but preserve the Flag Blue identity. Ensure text inside bubbles remains highly legible.",
+    "For the chat background, use the provided `chat_background_texture` image at a very low opacity (e.g., 5-10%) to create depth without distracting from the text.",
+    "Reactions: Overlap the reaction pills on the bottom edge of the message bubble, styled with a solid background matching the screen's surface color to cut out the bubble behind it.",
+    "Voice messages: Display a simple waveform (or placeholder line), play button, and underneath it, the dual-text transcription.",
+    "Include standard haptics on long-press (for context menus/reactions) and on message send."
+  ]
+}
