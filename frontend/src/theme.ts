@@ -3,7 +3,7 @@
 // found in both Brazil & Paraguay flags (#0038A8), accent = warm amber.
 
 import { useMemo } from "react";
-import { Appearance, StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 
 export type ColorScheme = "light" | "dark";
 
@@ -95,12 +95,6 @@ export type ThemeColors = typeof light;
 export const defaultScheme = "light" satisfies ColorScheme;
 
 export const themes: { light: ThemeColors; dark?: ThemeColors } = { light, dark };
-
-export function setColorScheme(scheme: ColorScheme | null) {
-  Appearance.setColorScheme?.(scheme);
-}
-
-setColorScheme?.(themes.dark ? null : defaultScheme);
 
 export function useTheme(): { scheme: ColorScheme; colors: ThemeColors } {
   const system = useColorScheme();

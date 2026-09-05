@@ -1,0 +1,27 @@
+{
+  "summary": "Regression validation for the Android crash fix (Appearance.setColorScheme(null) removed from /app/frontend/src/theme.ts). Verified: (1) grep confirms no remaining references to Appearance/setColorScheme in /app/frontend/{src,app}; (2) theme.ts now relies solely on useColorScheme() with a safe fallback to defaultScheme='light' — no top-level side effect; (3) app boots cleanly on Expo web preview (390x844) with 0 pageerrors, 0 console errors, 0 Appearance/color-scheme events. End-to-end critical path re-run: Welcome → 'Já tenho conta' → Login (bruno@test.com/senha123) → Chats list (conversation-row-lucia visible) → open Lucía conv → bubbles render translated Spanish as PRIMARY and original Portuguese as smaller discrete text below (verified 'Testando integracao UI' + 'Probando integración de UI', 'Tudo bem, obrigado!' + 'Todo bien, gracias!'). Long-press on a message opens the actions bottom-sheet with reactions row (👍❤️😂😮😢🙏) and Responder/Editar/Apagar/Cancelar (testIDs react-*, action-reply/edit/delete/cancel/backdrop confirmed). Back navigation to chats works. Only pre-existing RNW warnings observed (pointerEvents & shadow* deprecations from RN internals) — same as iteration_1, not app code. Note: native Android crash cannot be reproduced on web preview by design; the fix is correct because the offending top-level Appearance.setColorScheme(null) call has been removed and theme selection now uses the hook value directly.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_ponte_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "theme.ts:99-103 useTheme falls back to defaultScheme='light' when useColorScheme() returns null/undefined — safe on all platforms including Android at first render.",
+    "_layout.tsx uses scheme from useTheme() only for StatusBar style; no forced Appearance calls remain.",
+    "Fix does not affect existing dark theme wiring; iOS/Android will now follow system appearance passively (recommended pattern)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not re-tested (per request, 24/24 in iteration_1)", "frontend": "100% of regression flows passed"},
+  "seed_data_creation": "None (used existing seeded users bruno/lucia).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Regression for Android Appearance crash resolved. Public URL is EXPO_PUBLIC_BACKEND_URL=https://pt-es-chat.preview.emergentagent.com. Login flow selectors: 'Já tenho conta' (welcome), then two <input> for email/password, then 'Entrar'. Conversation testIDs: conversation-row-lucia, conversation-back, message-input, mic-button, message-bubble-<id>, react-<emoji>, action-reply/edit/delete/cancel, action-backdrop. Send button has no dedicated testID — bubble emits after pressing message-input's send icon (styled TouchableOpacity beside the input). Long-press works via mouse.down + 900-1200ms wait + mouse.up on a bubble.",
+  "rca_of_issue": "Root cause was a top-level side effect in theme.ts: `Appearance.setColorScheme(null)` executed at module import triggered the Android native crash 'Parameter specified as non-null is null: method com.facebook.react.modules.appearance.AppearanceModule.setColorScheme, parameter style' because the JNI signature for setColorScheme rejects null on Android. Fix: remove the call entirely and rely on React's useColorScheme() hook with a defensive fallback. Verification: grep -rn 'setColorScheme\\|Appearance' /app/frontend/src /app/frontend/app returns nothing; web preview boots with 0 errors; all critical UI flows still work."
+}
